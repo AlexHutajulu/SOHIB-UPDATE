@@ -1,0 +1,134 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('/image/Banjarbaru_city_hall.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    margin: 20px;
+    padding: 20px;
+}
+
+.form-title {
+    color: #333; /* Ubah warna teks menjadi hitam */
+    text-decoration: none; /* Hapus garis bawah */
+    font-weight: bold; /* Membuat teks menjadi tebal */
+    font-size: 24px; /* Mengatur ukuran teks */
+    text-align: center; /* Memposisikan teks di tengah */
+    display: block; /* Agar dapat menerapkan text-align: center */
+}
+
+.form-title:hover {
+    text-decoration: underline; /* Tambahkan garis bawah saat dihover */
+}
+
+
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.form-group button {
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between; /* Mengatur jarak antara tombol secara horizontal */
+    align-items: center;
+}
+
+.button-group button, .button-group .back-button {
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    width: 48%; /* Mengatur lebar tombol */
+    box-sizing: border-box;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.back-button {
+    background-color: #888;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #555;
+}
+
+.google-signup {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.google-signup a {
+    display: inline-block;
+    text-decoration: none;
+    color: #555;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.google-signup img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+/* Media Queries for responsiveness */
+@media only screen and (max-width: 600px) {
+    .login-container {
+        width: 100%;
+    }
+
+    .form-group button,
+    .google-signup {
+        width: 100%;
+        margin: 0 0 10px 0;
+    }
+
+    .form-group {
+        align-items: stretch;
+    }
+}
