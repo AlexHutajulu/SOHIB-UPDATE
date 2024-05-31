@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Str;
+
 class SocialController extends Controller
 {
     public function redirect()
@@ -37,14 +38,12 @@ class SocialController extends Controller
             }
 
             // Arahkan pengguna ke halaman submissions setelah login
-            toast('Berhasil Login','success');
+            toast('Berhasil Login', 'success');
             return redirect()->intended('/submissions');
         } catch (\Exception $e) {
-            
-            alert()->error('Gagal Login','Coba Lagi');
-            return redirect()->route('login')->withErrors(['error' => 'Terjadi kesalahan saat login dengan Google.']);
-       
-        }
 
+            alert()->error('Gagal Login', 'Coba Lagi');
+            return redirect()->route('login')->withErrors(['error' => 'Terjadi kesalahan saat login dengan Google.']);
+        }
     }
 }

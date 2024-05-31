@@ -22,19 +22,22 @@
                     <td>{{ $submission->name }}</td>
                     <td>{{ $submission->phone }}</td>
                     <td>{{ $submission->bank_name }}</td>
-                    <td>{{ $submission->bank_account}}</td>
+                    <td>{{ $submission->bank_account }}</td>
                     <td>{{ $submission->email }}</td>
                     <td>{{ $submission->ibadah }}</td>
                     <td style="text-align: center; vertical-align: middle;">
                         <a href="{{ route('admin.file', $submission->id) }}" style="display: block; text-align: center;">
                             <i class="fa-regular fa-eye fa-lg" style="color: #005eff;"></i>
                         </a>
-                    </td>                    
+                    </td>
                     <td style="text-align: center; vertical-align: middle;">
-                        <form action="{{ route('admin.uploadSk', $submission->id) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin.uploadSk', $submission->id) }}" method="post"
+                            enctype="multipart/form-data">
                             @csrf
-                            <input type="file" name="sk_file" accept=".pdf, .doc, .docx" id="fileInput{{ $submission->id }}" style="display: none;" onchange="submitForm(this)">
-                            <button type="button" class="btn btn-success btn-sm" onclick="openFileInput({{ $submission->id }})">Upload</button>
+                            <input type="file" name="sk_file" accept=".pdf, .doc, .docx"
+                                id="fileInput{{ $submission->id }}" style="display: none;" onchange="submitForm(this)">
+                            <button type="button" class="btn btn-success btn-sm"
+                                onclick="openFileInput({{ $submission->id }})">Upload</button>
                         </form>
                     </td>
                     <td>{{ $submission->status ?? 'NULL' }}</td>
@@ -42,7 +45,8 @@
                         <form action="{{ route('admin.destroy', $submission->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin?')">Hapus</button>
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Apakah anda yakin?')">Hapus</button>
                         </form>
                     </td>
             @endforeach

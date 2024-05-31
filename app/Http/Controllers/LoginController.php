@@ -31,7 +31,7 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
         $nikCredentials = ['nik' => $request->input('email'), 'password' => $request->input('password')];
-    
+
         // Attempt login with email
         if (Auth::attempt($credentials)) {
             // Jika berhasil, periksa role
@@ -39,26 +39,28 @@ class LoginController extends Controller
             $user = Auth::user();
             if ($user->role === 'admin') {
                 // Jika role admin, arahkan ke halaman admin
+                toast('Berhasil Login', 'success');
                 return redirect()->intended('/admin/new');
             } else {
                 // Jika role masyarakat, arahkan ke halaman submissions
+                toast('Berhasil Login', 'success');
                 return redirect()->intended('/submissions');
             }
         }
-    
+
         // Attempt login with NIK
         if (Auth::attempt($nikCredentials)) {
             // Jika berhasil, alihkan ke halaman submissions
-            toast('Berhasil Login','success');
+            toast('Berhasil Login', 'success');
             return redirect()->intended('/submissions');
         }
-    
+
         // Jika kedua upaya gagal, kembalikan dengan pesan kesalahan
-        alert()->error('ErrorAlert','Lorem ipsum dolor sit amet.');
+        alert()->error('Login Gagal', 'Silahkan Coba Lagi');
 
         return redirect('/login');
     }
-    
+
     public function googlelogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -87,15 +89,14 @@ class LoginController extends Controller
         // Jika kedua upaya gagal, kembalikan dengan pesan kesalahan
         return redirect('/login')->with('error', 'NIK atau Email dan Password Anda salah!');
     }
-    
+
     public function logout()
     {
         $userId = auth()->id();
         Auth::logout();
         Session::forget('sessions' . $userId); // Sesuaikan dengan prefix sesi yang sesuai
-        
-        return redirect('/Login.Login-admin');
-    }
-    
 
+        toast('Berhasil Logout', 'success');
+        return redirect('/login');
+    }
 }

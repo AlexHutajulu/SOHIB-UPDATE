@@ -76,7 +76,7 @@ class SubmissionController extends Controller
         $submission->user_id = auth()->id();
         $submission->save();
 
-        toast('Permintaan Berhasil Ditambahkan.','success');
+        toast('Permintaan Berhasil Ditambahkan.', 'success');
         return redirect()->route('submissions.index');
     }
 
@@ -101,12 +101,12 @@ class SubmissionController extends Controller
     {
         $user = Auth::user();
         $avatar = $user->avatar; // Mengambil avatar dari model pengguna
-    
+
         return view('submissions.profil', compact('user', 'avatar'));
     }
-    
 
-    
+
+
 
 
     public function showFile($id, $type)
