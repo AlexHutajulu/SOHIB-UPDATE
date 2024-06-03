@@ -1,4 +1,4 @@
-@extends('layouts.masyarakat')
+@extends('layouts.app')
 
 @section('title', 'SOHIB | Sistem Online Hibah Banjarbaru')
 

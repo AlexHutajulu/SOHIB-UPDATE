@@ -72,4 +72,5 @@ Route::get('/submissions/profil/{id}', [SubmissionController::class, 'profil'])-
 Route::get('/profil', [SubmissionController::class, 'showProfil'])->name('user.profil');
 
 Route::get('/profil', [SubmissionController::class, 'profilmasyarakat'])->name('profil');
+Route::get('/profil', [AdminController::class, 'profiladmin'])->name('profiladmin');
 Route::post('/update-profil', [UpdateProfilController::class, 'update'])->name('update_profil');

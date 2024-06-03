@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/login1.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="login-container">
         <div class="logo-container">
@@ -26,7 +28,8 @@
                 <h2 class="form-title">Login</h2>
                 <div class="form-group">
                     <label for="email">NIK Atau Email:</label>
-                    <input type="text" id="email" name="email" placeholder="Masukkan NIK atau Email Anda" required>
+                    <input type="text" id="email" name="email" placeholder="Masukkan NIK atau Email Anda"
+                        required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
@@ -60,5 +63,7 @@
             document.getElementById('loginForm').submit();
         }
     </script>
+    @include('sweetalert::alert')
 </body>
+
 </html>
