@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Storage;
+use Auth;
 
 class AdminController extends Controller
 {
@@ -81,6 +82,14 @@ class AdminController extends Controller
 
         // Lalu kembalikan view atau lakukan aksi lainnya
         return view('admin.file', ['submission' => $submission]);
+    }
+
+    public function profiladmin()
+    {
+        $user = Auth::user();
+        $avatar = $user->avatar; // Mengambil avatar dari model pengguna
+
+        return view('admin.profil', compact('user', 'avatar'));
     }
 
     public function update(Request $request, $id)

@@ -57,7 +57,7 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-
+                    <li><a class="dropdown-item" href="{{ route('profiladmin') }}">Profile</a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
@@ -65,7 +65,8 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <a class="dropdown-item" href="#"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
                         </a>
                     </li>
@@ -101,7 +102,7 @@
                         <a class="nav-link" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-map-marker-alt"></i></div>
                             Sebaran Permohonan
-                        </a>                        
+                        </a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
