@@ -33,7 +33,10 @@ class RedirectIfRoleNotMatch
             return redirect()->route('admin.dashboard');
         } elseif ($user->role == 'masyarakat') {
             return redirect()->route('masyarakat.dashboard');
+        } elseif ($user->role == 'kelurahan') {
+            return redirect()->route('kelurahan.index');
         }
+        
 
         return redirect('/login');
     }

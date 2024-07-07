@@ -84,22 +84,12 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
-                        <div class="sb-sidenav-menu-heading">Menu</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Macam-Macam Bansos
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        <div class="sb-sidenav-menu-heading">Data Permohanan</div>
+                        <a class="nav-link" href="{{ route('admin.submission-table') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Data Permohonan Yang Sudah Di Proses
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="#">Bansos Bidang KESMAS</a>
-                                <a class="nav-link" href="#">Bansos Bidang KESOS</a>
-                                <a class="nav-link" href="#">Bansos Bidang Binamental Spiritual</a>
-                            </nav>
-                        </div>
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('maps.show') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-map-marker-alt"></i></div>
                             Sebaran Permohonan
                         </a>
@@ -139,6 +129,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
         crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/datatables-simple-demo.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     @include('sweetalert::alert')
 </body>
 

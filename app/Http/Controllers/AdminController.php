@@ -11,9 +11,14 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $user = auth()->guard('web')->user();
         $submissions = Submission::all();
         return view('admin.index', compact('submissions'));
+    }
+
+    public function status()
+    {
+        $submissions = Submission::all();
+        return view('admin.submission-table', compact('submissions'));
     }
 
     public function show($id)
@@ -40,20 +45,27 @@ class AdminController extends Controller
             'note' => 'nullable|string',
         ]);
 
-        $submission->status = ($request->input('status') == 'disetujui') ? 'disetujui' : 'ditolak';
+        $status = $request->input('status');
+        $submission->status = $status;
         $submission->note = $request->input('note');
         $submission->save();
 
-        toast('Submission approved/rejected successfully.', 'success');
+        if ($status == 'disetujui') {
+            toast('Permohonan disetujui.', 'success');
+        } else {
+            toast('Permohonan ditolak.', 'error');
+        }
+
         return redirect()->route('admin.new');
     }
+
 
     public function destroy($id)
     {
         $submission = Submission::findOrFail($id);
 
         // Hapus file terkait jika ada
-        $fileFields = ['application_letter', 'documentation', 'tanah', 'rab', 'land_certificate', 'management_letter', 'notaris', 'npwp', 'domicile_letter'];
+        $fileFields = ['application_letter', 'documentation', 'tanah', 'rab', 'land_certificate', 'management_letter', 'notaris', 'npwp', 'domicile_letter', 'sk_file'];
 
         foreach ($fileFields as $field) {
             $file = $submission->$field;
@@ -69,19 +81,14 @@ class AdminController extends Controller
 
     public function edit($id)
     {
-        // Temukan submission berdasarkan ID
         $submission = Submission::findOrFail($id);
-
-        // Tampilkan form edit dengan data submission
-        return view('admin.edit', ['submission' => $submission]);
+        return view('admin.edit', compact('submission'));
     }
+
     public function file($id)
     {
-        // Ambil data submission berdasarkan ID
         $submission = Submission::findOrFail($id);
-
-        // Lalu kembalikan view atau lakukan aksi lainnya
-        return view('admin.file', ['submission' => $submission]);
+        return view('admin.file', compact('submission'));
     }
 
     public function profiladmin()
@@ -94,13 +101,13 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validasi input
         $request->validate([
             'nik' => 'required|numeric|unique:submissions,nik,' . $id,
             'name' => 'required|max:100',
             'address' => 'required',
             'ibadah' => 'required',
             'bank_name' => 'required',
+            'kelurahan_name' => 'required',
             'phone' => 'required',
             'email' => 'required|email|unique:submissions,email,' . $id,
             'budget' => 'required',
@@ -116,64 +123,60 @@ class AdminController extends Controller
             'tanah' => 'nullable|file|mimes:pdf,doc,docx',
         ]);
 
-        // Temukan submission berdasarkan ID
         $submission = Submission::findOrFail($id);
 
-        // Update data submission
-        $submission->update([
-            // ... pembaruan kolom lainnya
-            'application_letter' => $request->application_letter,
-            // ... pembaruan kolom lainnya
-        ]);
+        $submission->update($request->all());
 
         // Update file jika diunggah
         if ($request->hasFile('application_letter')) {
-            // Hapus file lama jika ada
-            Storage::delete($submission->application_letter);
-
-            // Simpan file yang baru di storage
-            $submission->application_letter = $request->file('application_letter')->store('path/to/storage');
+            $file = $request->file('application_letter');
+            $filename = 'application_letter_' . $id . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public', $filename);
+            $submission->application_letter = $filename;
         }
 
         // Lakukan hal yang sama untuk file-file lainnya
 
-        // Simpan perubahan
         $submission->save();
 
-        // Tampilkan form edit atau tindakan lainnya sesuai kebutuhan
         return redirect()->route('admin.new')->with('success', 'Submission updated successfully');
     }
 
     public function uploadSk(Request $request, $id)
     {
-        // Validasi form jika diperlukan
+        // Validasi request
         $request->validate([
-            'sk_file' => 'required|mimes:pdf,doc,docx|max:10240', // Maksimal 10MB
+            'sk_file' => 'required|file|mimes:pdf,doc,docx|max:10240', // Sesuaikan dengan kebutuhan Anda
         ]);
+
+        // Temukan submission berdasarkan ID
+        $submission = Submission::findOrFail($id);
 
         // Proses penyimpanan file
         if ($request->hasFile('sk_file')) {
             $file = $request->file('sk_file');
-            $filename = 'sk_' . $id . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('sk_file', $filename,);
+            $filePath = $file->store('public/sk_files'); // Simpan file di dalam direktori 'public'
 
-            // Simpan informasi file di database jika diperlukan
-            $submission = Submission::findOrFail($id);
-            $submission->sk_file = $filename;
+            // Simpan path file ke dalam model submission
+            $submission->sk_file = $filePath;
             $submission->save();
+
+            // Jika perlu, tambahkan respons atau redirect ke halaman yang sesuai
+            toast('Upload Surat Berhasil.', 'success');
+            return redirect()->back();
         }
 
-        // Redirect atau lakukan aksi lainnya
-        return redirect()->route('admin.new')->with('success', 'File SK berhasil diupload.');
+        toast('Upload Surat Gagal.', 'error');
+        return redirect()->back();
     }
+
     public function store(Request $request)
     {
         $request->validate([
             'sk_file' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
-
-        $sk_filePath = $request->file('sk_file')->store('sk_file');
+        $sk_filePath = $request->file('sk_file')->store('public/sk_files');
 
         $submission = new Submission([
             'sk_file' => $sk_filePath,
@@ -183,5 +186,27 @@ class AdminController extends Controller
 
         toast('Success', 'success');
         return redirect('/admin/new');
+    }
+
+    public function approvedSubmissions()
+    {
+        $approvedSubmissions = Submission::where('status', 'disetujui')->get();
+        return view('admin.approved', compact('approvedSubmissions'));
+    }
+
+    public function rejectedSubmissions()
+    {
+        $rejectedSubmissions = Submission::where('status', 'ditolak')->get();
+        return view('admin.rejected', compact('rejectedSubmissions'));
+    }
+    public function detail($id)
+    {
+        $submission = Submission::find($id);
+
+        if (!$submission) {
+            return redirect()->back()->with('error', 'Submission not found.');
+        }
+
+        return view('admin.detail', compact('submission'));
     }
 }

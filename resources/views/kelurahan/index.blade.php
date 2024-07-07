@@ -1,4 +1,4 @@
-@extends('layouts.masyarakat')
+@extends('layouts.kelurahan')
 
 @section('title', 'SOHIB | Sistem Online Hibah Banjarbaru')
 
@@ -7,7 +7,7 @@
         <h1 class="mb-4 text-left">Dashboard</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                @if (auth()->check() && auth()->user()->role === 'masyarakat')
+                @if (auth()->check() && auth()->user()->role === 'kelurahan')
                     <li class="breadcrumb-item active" aria-current="page">{{ auth()->user()->name }}</li>
                 @endif
             </ol>
@@ -21,23 +21,21 @@
                     <table id="datatablesSimple" class="table table-striped table-hover" style="width:100%">
                         <thead class="thead-dark">
                             <tr>
-                                <th>NIK</th>
-                                <th>Nama dan Email</th>
+                                <th>Nama Lengkap</th>
                                 <th>Alamat</th>
-                                <th>Nama Tempat Rumah Ibadah</th>
+                                <th>Rumah Ibadah</th>
                                 <th>No Telepon</th>
                                 <th>Jenis Bank</th>
                                 <th>No Rekening</th>
-                                <th>Dokumen Anda</th>
+                                <th>file</th>
                                 <th>Status</th>
                                 <th>Note</th>
-                                <th>Actions</th>
+                                <th>Ajukan Ulang</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($submissions as $submission)
                                 <tr>
-                                    <td>{{ $submission->nik }}</td>
                                     <td>
                                         <div>{{ $submission->name }}</div>
                                         <div class="text-muted">{{ $submission->email }}</div>
@@ -50,7 +48,7 @@
                                     <td style="text-align: center;">
                                         <a href="{{ route('submissions.file', $submission->id) }}"
                                             class="btn btn-primary btn-sm">
-                                            <i class="fas fa-eye fa-lg"></i> Lihat
+                                            <i class="fas fa-eye fa-lg"></i>
                                         </a>
                                     </td>
                                     <td>
@@ -73,14 +71,4 @@
     </div>
 @endsection
 
-@section('styles')
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-@endsection
 
-@section('scripts')
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-@endsection

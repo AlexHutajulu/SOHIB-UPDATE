@@ -3,96 +3,197 @@
 @section('title', 'File Masyarakat')
 
 @section('content')
-    <h1 class="mt-4">{{ $submission->name }}</h1>
-    <form action="{{ route('submissions.file', $submission->id) }}" method="post" enctype="multipart/form-data" class="row g-2">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="text-center">File Anda</h1>
+            <a href="/submissions" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </div>
+        <h3 class="mb-4 text-left">Nama: {{ $submission->name }}</h3>
         <div class="table-responsive">
-            <table id="datatablesSimple" class="table table-bordered table-striped">
-                <tr>
-                    <thead>
-                        <th>Surat Pengantar</th>
-                        <th>Foto Tempat Ibadah</th>
-                        <th>Akta Tanah</th>
-                        <th>Barang Yang Diperlukan</th>
-                        <th>SK kepengurusan</th>
-                        <th>SKT</th>
-                        <th>Akta Notaris/Surat Berbadan Hukum</th>
-                        <th>NPWP Perwakilan</th>
-                        <th>Surat Domisili</th>
-                        <th>Surat Keputusan dari Admin</th>
-                        <th>Status</th>
-                    </thead>
-                </tr>
-                <tr>
-                    <tbody>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'application_letter']) }}" target="_blank">
-                                <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                            </a>
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'documentation']) }}" target="_blank">
-                                <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                            </a>  
-                            </a>
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'tanah']) }}" target="_blank">
-                                <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                            </a>
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'rab']) }}" target="_blank">
-                                <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                            </a>
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'land_certificate']) }}" target="_blank">
-                                <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                            </a>
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            @if($submission->management_letter)
-                                <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'management_letter']) }}" target="_blank">
-                                    <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                                </a>
-                            @else
-                                File Kosong
-                            @endif
-                        </td>
-                        
-                        <td style="text-align: center; vertical-align: middle;">
-                            @if($submission->notaris)
-                                <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'notaris']) }}" target="_blank">
-                                    <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                                </a>
-                            @else
-                                File Kosong
-                            @endif
-                        </td>                        
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'npwp']) }}" target="_blank">
-                                <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                            </a>
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'domicile_letter']) }}" target="_blank">
-                                <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
-                            </a>
-                        </td>
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Jenis Dokumen</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Surat Pengantar</td>
                         <td class="text-center align-middle">
-                            @if($submission->sk_file)
-                                <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'sk_file']) }}" target="_blank">
-                                    <i class="fa-solid fa-cloud-arrow-down fa-lg" style="color: #00db25;"></i>
+                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'application_letter']) }}"
+                                target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye fa-lg"></i> Lihat
+                            </a>
+                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'application_letter']) }}"
+                                class="btn btn-success btn-sm">
+                                <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Foto Tempat Ibadah</td>
+                        <td class="text-center align-middle">
+                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'documentation']) }}"
+                                target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye fa-lg"></i> Lihat
+                            </a>
+                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'documentation']) }}"
+                                class="btn btn-success btn-sm">
+                                <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Akta Tanah</td>
+                        <td class="text-center align-middle">
+                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'tanah']) }}"
+                                target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye fa-lg"></i> Lihat
+                            </a>
+                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'tanah']) }}"
+                                class="btn btn-success btn-sm">
+                                <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Barang Yang Diperlukan</td>
+                        <td class="text-center align-middle">
+                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'rab']) }}"
+                                target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye fa-lg"></i> Lihat
+                            </a>
+                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'rab']) }}"
+                                class="btn btn-success btn-sm">
+                                <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SK Kepengurusan</td>
+                        <td class="text-center align-middle">
+                            @if ($submission->management_letter)
+                                <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'management_letter']) }}"
+                                    target="_blank" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye fa-lg"></i> Lihat
+                                </a>
+                                <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'management_letter']) }}"
+                                    class="btn btn-success btn-sm">
+                                    <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
                                 </a>
                             @else
-                                File Kosong
+                                <span class="text-muted">File Kosong</span>
                             @endif
                         </td>
-                        <td>{{ $submission->status ?? 'NULL' }}</td>
-                    </tbody>
-                </tr>
+                    </tr>
+                    <tr>
+                        <td>SKT</td>
+                        <td class="text-center align-middle">
+                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'skt']) }}"
+                                target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye fa-lg"></i> Lihat
+                            </a>
+                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'skt']) }}"
+                                class="btn btn-success btn-sm">
+                                <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Akta Notaris/Surat Berbadan Hukum</td>
+                        <td class="text-center align-middle">
+                            @if ($submission->notaris)
+                                <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'notaris']) }}"
+                                    target="_blank" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye fa-lg"></i> Lihat
+                                </a>
+                                <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'notaris']) }}"
+                                    class="btn btn-success btn-sm">
+                                    <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                                </a>
+                            @else
+                                <span class="text-muted">File Kosong</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NPWP Perwakilan</td>
+                        <td class="text-center align-middle">
+                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'npwp']) }}"
+                                target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye fa-lg"></i> Lihat
+                            </a>
+                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'npwp']) }}"
+                                class="btn btn-success btn-sm">
+                                <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Surat Domisili</td>
+                        <td class="text-center align-middle">
+                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'domicile_letter']) }}"
+                                target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye fa-lg"></i> Lihat
+                            </a>
+                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'domicile_letter']) }}"
+                                class="btn btn-success btn-sm">
+                                <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Surat Keputusan Dari Admin</td>
+                        <td class="text-center align-middle">
+                            @if ($submission->sk_file)
+                                <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'sk_file']) }}"
+                                    target="_blank" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye fa-lg"></i> Lihat
+                                </a>
+                                <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'sk_file']) }}"
+                                    class="btn btn-success btn-sm">
+                                    <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                                </a>
+                            @else
+                                <span class="text-muted">File Kosong</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Surat Keterangan Kelurahan</td>
+                        <td class="text-center align-middle">
+                            @if ($submission->surat_kelurahan)
+                                <a href="{{ route('surat_kelurahan.show', ['id' => $submission->id]) }}" target="_blank"
+                                    class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye fa-lg"></i> Lihat
+                                </a>
+                                <a href="{{ route('surat_kelurahan.download', ['id' => $submission->id]) }}"
+                                    class="btn btn-success btn-sm">
+                                    <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                                </a>
+                            @else
+                                <span class="text-muted">File Kosong</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <!-- Tambahkan detail lain yang diperlukan -->
+                </tbody>
             </table>
         </div>
-    </form>
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/table.css') }}">
+    </div>
+@endsection
+
+@section('styles')
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @endsection

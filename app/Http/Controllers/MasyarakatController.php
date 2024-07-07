@@ -24,4 +24,12 @@ class MasyarakatController extends Controller
         // Lalu kembalikan view atau lakukan aksi lainnya
         return view('submissions.file', ['submission' => $submission]);
     }
+
+    public function profilmasyarakat()
+    {
+        $user = Auth::user();
+        $avatar = $user->avatar; // Mengambil avatar dari model pengguna
+
+        return view('submissions.profil', compact('user', 'avatar'));
+    }
 }

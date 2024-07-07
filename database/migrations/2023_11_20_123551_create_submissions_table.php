@@ -19,6 +19,7 @@ class CreateSubmissionsTable extends Migration
             $table->foreignId('user_id')->unique()->constrained(); // Kunci asing ke tabel users, diatur sebagai unik
             $table->string('nik')->unique();
             $table->string('name', 100);
+            $table->string('kelurahan_name');
             $table->text('address');
             $table->text('ibadah');
             $table->string('bank_name')->nullable();
@@ -35,7 +36,7 @@ class CreateSubmissionsTable extends Migration
             $table->binary('domicile_letter');
             $table->binary('tanah');
             $table->binary('rab');
-            $table->enum('status', ['proses', 'disetujui', 'ditolak'])->default('proses');
+            $table->enum('status', ['proses', 'disetujui', 'ditolak', 'diketahui','diterima','pencairan'])->default('proses');
             $table->text('note')->nullable();
             $table->timestamps();
         });

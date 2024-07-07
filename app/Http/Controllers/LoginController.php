@@ -38,11 +38,12 @@ class LoginController extends Controller
             Session::forget('sessions' . Auth::id());
             $user = Auth::user();
             if ($user->role === 'admin') {
-                // Jika role admin, arahkan ke halaman admin
-                toast('Berhasil Login', 'success');
+                toast('Berhasil Login Sebagai Admin', 'success');
                 return redirect()->intended('/admin/new');
+            } elseif ($user->role === 'kelurahan') {
+                toast('Berhasil Login', 'success');
+                return redirect()->intended('/kelurahan');
             } else {
-                // Jika role masyarakat, arahkan ke halaman submissions
                 toast('Berhasil Login', 'success');
                 return redirect()->intended('/submissions');
             }
@@ -50,16 +51,25 @@ class LoginController extends Controller
 
         // Attempt login with NIK
         if (Auth::attempt($nikCredentials)) {
-            // Jika berhasil, alihkan ke halaman submissions
-            toast('Berhasil Login', 'success');
-            return redirect()->intended('/submissions');
+            Session::forget('sessions' . Auth::id());
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                toast('Berhasil Login Sebagai Admin', 'success');
+                return redirect()->intended('/admin/new');
+            } elseif ($user->role === 'kelurahan') {
+                toast('Berhasil Login', 'success');
+                return redirect()->intended('/kelurahan');
+            } else {
+                toast('Berhasil Login', 'success');
+                return redirect()->intended('/submissions');
+            }
         }
 
         // Jika kedua upaya gagal, kembalikan dengan pesan kesalahan
         alert()->error('Login Gagal', 'Silahkan Coba Lagi');
-
         return redirect('/login');
     }
+
 
     public function googlelogin(Request $request)
     {
@@ -68,27 +78,33 @@ class LoginController extends Controller
 
         // Attempt login with email
         if (Auth::attempt($credentials)) {
-            // Jika berhasil, periksa role
             Session::forget('sessions' . Auth::id());
             $user = Auth::user();
             if ($user->role === 'admin') {
-                // Jika role admin, arahkan ke halaman admin
                 return redirect()->intended('/admin/new');
+            } elseif ($user->role === 'kelurahan') {
+                return redirect()->intended('/kelurahan');
             } else {
-                // Jika role masyarakat, arahkan ke halaman submissions
                 return redirect()->intended('/submissions');
             }
         }
 
         // Attempt login with NIK
         if (Auth::attempt($nikCredentials)) {
-            // Jika berhasil, alihkan ke halaman submissions
-            return redirect()->intended('/submissions');
+            Session::forget('sessions' . Auth::id());
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin/new');
+            } elseif ($user->role === 'kelurahan') {
+                return redirect()->intended('/kelurahan');
+            } else {
+                return redirect()->intended('/submissions');
+            }
         }
 
-        // Jika kedua upaya gagal, kembalikan dengan pesan kesalahan
         return redirect('/login')->with('error', 'NIK atau Email dan Password Anda salah!');
     }
+
 
     public function logout()
     {

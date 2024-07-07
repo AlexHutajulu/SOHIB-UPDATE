@@ -31,7 +31,7 @@ class SocialController extends Controller
                     'email' => $googleUser->email,
                     'avatar' => $googleUser->avatar,
                     'role' => 'masyarakat', // Atur peran default, jika diperlukan
-                    'password' => bcrypt(Str::random(24)), // Atur password acak karena tidak digunakan untuk login
+                    'password' => Hash::make(Str::random(24)), // Atur password acak karena tidak digunakan untuk login
                     'email_verified_at' => now(), // Set email sebagai sudah diverifikasi
                 ]);
                 Auth::login($user);
@@ -40,7 +40,13 @@ class SocialController extends Controller
             // Periksa peran pengguna dan arahkan ke halaman yang sesuai
             if ($user->role == 'admin') {
                 toast('Berhasil Login sebagai Admin', 'success');
-                return redirect()->route('admin.new');
+                return redirect()->route('kelurahan.index');
+            } elseif ($user->role == 'kelurahan') {
+                toast('Berhasil Login sebagai Kelurahan', 'success');
+                return redirect()->route('kelurahan.index');
+            } elseif ($user->role == 'pimpinan') {
+                toast('Berhasil Login sebagai Pimpinan', 'success');
+                return redirect()->route('pimpinan.index');
             } else {
                 toast('Berhasil Login', 'success');
                 return redirect()->intended('/submissions');

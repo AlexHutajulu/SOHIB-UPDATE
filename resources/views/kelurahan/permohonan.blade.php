@@ -1,4 +1,4 @@
-@extends('layouts.masyarakat')
+@extends('layouts.kelurahan')
 
 @section('title', 'SOHIB | Sistem Online Hibah Banjarbaru')
 <link rel="stylesheet" href="css/create.css">

@@ -1,4 +1,4 @@
-@extends('layouts.masyarakat')
+@extends('layouts.pimpinan')
 
 @section('title', 'SOHIB | Sistem Online Hibah Banjarbaru')
 
@@ -25,7 +25,7 @@
                                 <div class="form-group row mb-3">
                                     <label for="nik" class="col-sm-3 col-form-label">NIK</label>
                                     <div class="col-sm-9">
-                                        <input type="number" id="nik" name="nik" value="{{ $user->nik }}"
+                                        <input type="text" id="nik" name="nik" value="{{ $user->nik }}"
                                             class="form-control">
                                     </div>
                                 </div>
