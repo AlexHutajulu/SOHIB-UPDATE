@@ -147,6 +147,9 @@ class SubmissionController extends Controller
             case 'management_letter':
                 $file = $submission->management_letter;
                 break;
+            case 'skt':
+                $file = $submission->management_letter;
+                break;
             case 'notaris':
                 $file = $submission->notaris;
                 break;
@@ -191,11 +194,14 @@ class SubmissionController extends Controller
             case 'rab':
                 $file = $submission->rab;
                 break;
+            case 'land_certificate':
+                $file = $submission->land_certificate;
+                break;
             case 'management_letter':
                 $file = $submission->management_letter;
                 break;
             case 'skt':
-                $file = $submission->skt;
+                $file = $submission->management_letter;
                 break;
             case 'notaris':
                 $file = $submission->notaris;

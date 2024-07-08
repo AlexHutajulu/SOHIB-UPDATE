@@ -27,6 +27,7 @@ class AdminController extends Controller
         return view('admin.show', compact('submission'));
     }
 
+
     public function newSubmissions()
     {
         $newSubmissions = Submission::where('status', 'proses')->get();
@@ -65,18 +66,18 @@ class AdminController extends Controller
         $submission = Submission::findOrFail($id);
 
         // Hapus file terkait jika ada
-        $fileFields = ['application_letter', 'documentation', 'tanah', 'rab', 'land_certificate', 'management_letter', 'notaris', 'npwp', 'domicile_letter', 'sk_file'];
+        $fileFields = ['application_letter', 'documentation', 'tanah', 'rab', 'land_certificate', 'management_letter', 'notaris', 'npwp', 'domicile_letter', 'sk_file', 'suratpimpinan'];
 
         foreach ($fileFields as $field) {
             $file = $submission->$field;
             if ($file) {
-                Storage::delete('public/' . $file);
+                Storage::delete('app/public/' . $file);
             }
         }
 
         $submission->delete();
-
-        return redirect()->route('admin.new')->with('success', 'Submission berhasil dihapus');
+        toast('Permohonan Berhasil Dihapus', 'success');
+        return redirect()->route('admin.new');
     }
 
     public function edit($id)
@@ -208,5 +209,24 @@ class AdminController extends Controller
         }
 
         return view('admin.detail', compact('submission'));
+    }
+
+    public function showsuratpimpinan($id)
+    {
+        $submission = Submission::findOrFail($id);
+        $file_path = storage_path('app/public/suratpimpinan/' . $submission->suratpimpinan->file_pimpinan);
+
+        if (file_exists($file_path)) {
+            return response()->file($file_path);
+        } else {
+            abort(404); // Jika file tidak ditemukan, tampilkan error 404
+        }
+    }
+
+    public function downloadsuratpimpinan($id)
+    {
+        $submission = Submission::findOrFail($id);
+        $file_path = storage_path('app/public/suratpimpinan/' . $submission->suratpimpinan->file_pimpinan);
+        return response()->download($file_path);
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Hash;
 
 class SocialController extends Controller
 {

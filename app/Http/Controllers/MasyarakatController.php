@@ -32,4 +32,23 @@ class MasyarakatController extends Controller
 
         return view('submissions.profil', compact('user', 'avatar'));
     }
+
+    public function seeleadershipletter($id)
+    {
+        $submission = Submission::findOrFail($id);
+        $file_path = storage_path('app/public/suratpimpinan/' . $submission->suratpimpinan->file_pimpinan);
+
+        if (file_exists($file_path)) {
+            return response()->file($file_path);
+        } else {
+            abort(404); // Jika file tidak ditemukan, tampilkan error 404
+        }
+    }
+
+    public function downloadleadershipletter($id)
+    {
+        $submission = Submission::findOrFail($id);
+        $file_path = storage_path('app/public/suratpimpinan/' . $submission->suratpimpinan->file_pimpinan);
+        return response()->download($file_path);
+    }
 }

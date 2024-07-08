@@ -69,12 +69,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
     Route::get('/admin/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
     Route::put('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::get('/admin/show/{id}', [AdminController::class, 'showsuratpimpinan'])->name('showsuratpimpinan');
+    Route::get('/admin/download/{id}', [Admincontroller::class, 'downloadsuratpimpinan'])->name('unduhsuratpimpinan');
 });
 // File
 Route::get('/file/{id}/{type}', [FileController::class, 'show'])->name('file.show');
 Route::get('/submissions/file/{id}', [MasyarakatController::class, 'file'])->name('submissions.file');
+Route::get('/kelurahan/file/{id}', [KelurahanController::class, 'file'])->name('kelurahan.file');
 Route::get('/submissions/show-file/{id}/{type}', [SubmissionController::class, 'showFile'])->name('submissions.show_file');
 Route::get('/submissions/{id}/public/{type}', [SubmissionController::class, 'downloadFile'])->name('submissions.download_file');
+Route::get('/show/{id}', [FileController::class, 'lihatsuratpimpinan'])->name('lihatsuratpimpinan');
+Route::get('/download/{id}', [FileController::class, 'download'])->name('downloadsuratpimpinan');
 // Google
 Route::get('/auth/redirect', [SocialController::class, 'redirect'])->name('google.redirect');
 Route::get('/google/redirect', [SocialController::class, 'googleCallback'])->name('google.callback');
@@ -88,11 +93,19 @@ Route::middleware(['auth', 'role:kelurahan'])->group(function () {
             ->name('surat_kelurahan.upload');
     });
 });
-Route::get('/surat_kelurahan/show/{id}', [KelurahanController::class, 'show'])->name('surat_kelurahan.show');
-Route::get('/surat_kelurahan/download/{id}', [KelurahanController::class, 'download'])->name('surat_kelurahan.download');
+Route::get('/show/{id}', [KelurahanController::class, 'show'])->name('surat_kelurahan.show');
+Route::get('/download/{id}', [KelurahanController::class, 'download'])->name('surat_kelurahan.download');
 Route::middleware(['auth', 'role:pimpinan'])->group(function () {
     Route::get('/pimpinan', [PimpinanController::class, 'index'])->name('pimpinan.index');
     Route::get('/data/permohonan', [PimpinanController::class, 'datapermohonan'])->name('datapermohonan');
     Route::get('/submission/{id}', [PimpinanController::class, 'detaildata'])->name('pimpinan.permohonan');
+    Route::prefix('kelurahan')->group(function () {
+        Route::post('/surat_pimpinan/{submissionId}', [Pimpinancontroller::class, 'store'])
+            ->name('surat_pimpinan.upload');
+    });
+    Route::get('/surat_pimpinan/show/{id}', [PimpinanController::class, 'show'])->name('surat_pimpinan.show');
+    Route::put('/pimpinan/submissions/{id}/status/{status}', [PimpinanController::class, 'updateStatus'])->name('pimpinan.updateStatus');
+    Route::get('/pimpinan/confirmation/{id}', [PimpinanController::class, 'confirmation'])->name('pimpinan.confirmation');
 });
-
+Route::get('/submission/show/{id}', [MasyarakatController::class, 'seeleadershipletter'])->name('seeleadershipletter');
+Route::get('/submission/download/{id}', [Masyarakatcontroller::class, 'downloadleadershipletter'])->name('downloadleadershipletter');

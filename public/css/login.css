@@ -21,22 +21,31 @@ body {
     max-width: 400px;
     margin: 20px;
     padding: 20px;
+    align-items: center;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
 }
 
 .form-title {
-    color: #333; /* Ubah warna teks menjadi hitam */
-    text-decoration: none; /* Hapus garis bawah */
-    font-weight: bold; /* Membuat teks menjadi tebal */
-    font-size: 24px; /* Mengatur ukuran teks */
-    text-align: center; /* Memposisikan teks di tengah */
-    display: block; /* Agar dapat menerapkan text-align: center */
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+    display: block;
 }
 
 .form-title:hover {
-    text-decoration: underline; /* Tambahkan garis bawah saat dihover */
+    text-decoration: underline;
 }
-
-
 
 .form-group {
     margin-bottom: 20px;
@@ -69,7 +78,7 @@ body {
 
 .button-group {
     display: flex;
-    justify-content: space-between; /* Mengatur jarak antara tombol secara horizontal */
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -78,7 +87,7 @@ body {
     border-radius: 6px;
     cursor: pointer;
     text-align: center;
-    width: 48%; /* Mengatur lebar tombol */
+    width: 48%;
     box-sizing: border-box;
     font-weight: bold;
     text-transform: uppercase;
@@ -114,6 +123,12 @@ body {
     height: 20px;
     vertical-align: middle;
     margin-right: 8px;
+}
+
+.google-description {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
 }
 
 /* Media Queries for responsiveness */

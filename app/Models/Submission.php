@@ -19,7 +19,7 @@ class Submission extends Model
     protected $fillable = [
         'nik', 'name', 'address','bank_name', 'phone', 'email', 'budget', 'bank_account', 'application_letter', 'documentation',
         'email', 'land_certificate', 'management_letter', 'notaris', 'npwp', 'domicile_letter','ibadah','tanah','rab', 'status',
-        'information','kelurahan_name',
+        'information','kelurahan_name', 
     ];
 
     public function user()
@@ -35,5 +35,10 @@ class Submission extends Model
     public function surat_kelurahan()
     {
         return $this->hasOne(surat_kelurahan::class);
+    }
+
+    public function suratpimpinan()
+    {
+        return $this->hasOne(suratpimpinan::class);
     }
 }

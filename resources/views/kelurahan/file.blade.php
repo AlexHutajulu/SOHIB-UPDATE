@@ -1,4 +1,4 @@
-@extends('layouts.masyarakat')
+@extends('layouts.kelurahan')
 
 @section('title', 'File Masyarakat')
 
@@ -6,7 +6,7 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="text-center">File Anda</h1>
-            <a href="/submissions" class="btn btn-secondary">
+            <a href="/kelurahan" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
         </div>
@@ -183,11 +183,11 @@
                         <td>Surat Keputusan Pimpinan</td>
                         <td class="text-center align-middle">
                             @if ($submission->suratpimpinan)
-                                <a href="{{ route('seeleadershipletter', ['id' => $submission->id]) }}" target="_blank"
+                                <a href="{{ route('lihatsuratpimpinan', ['id' => $submission->id]) }}" target="_blank"
                                     class="btn btn-primary btn-sm">
                                     <i class="fas fa-eye fa-lg"></i> Lihat
                                 </a>
-                                <a href="{{ route('downloadleadershipletter', ['id' => $submission->id]) }}"
+                                <a href="{{ route('downloadsuratpimpinan', ['id' => $submission->id]) }}"
                                     class="btn btn-success btn-sm">
                                     <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
                                 </a>

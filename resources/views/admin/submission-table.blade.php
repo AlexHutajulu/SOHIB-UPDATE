@@ -30,7 +30,11 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($submissions as $submission)
-                                        @if ($submission->status == 'disetujui' || $submission->status == 'ditolak')
+                                        @if (
+                                            $submission->status == 'disetujui' ||
+                                                $submission->status == 'ditolak' ||
+                                                $submission->status == 'diterima' ||
+                                                $submission->status == 'pencairan')
                                             <tr>
                                                 <td>{{ $submission->nik }}</td>
                                                 <td>
@@ -65,7 +69,15 @@
                                                 <td>{{ $submission->note }}</td>
                                                 <td>
                                                     <span
-                                                        class="{{ $submission->status == 'ditolak' ? 'btn btn-danger btn-sm' : ($submission->status == 'disetujui' ? 'btn btn-success btn-sm' : '') }}">
+                                                        class="{{ $submission->status == 'ditolak'
+                                                            ? 'btn btn-danger btn-sm'
+                                                            : ($submission->status == 'disetujui'
+                                                                ? 'btn btn-success btn-sm'
+                                                                : ($submission->status == 'proses'
+                                                                    ? 'btn btn-secondary btn-sm'
+                                                                    : ($submission->status == 'diterima'
+                                                                        ? 'btn btn-info btn-sm'
+                                                                        : ''))) }}">
                                                         {{ $submission->status ?? 'NULL' }}
                                                     </span>
                                                 </td>

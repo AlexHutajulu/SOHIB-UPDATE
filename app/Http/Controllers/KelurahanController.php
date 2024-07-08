@@ -89,4 +89,13 @@ class KelurahanController extends Controller
         $file_path = storage_path('app/public/surat_kelurahan/' . $submission->surat_kelurahan->file_kelurahan);
         return response()->download($file_path);
     }
+
+    public function file($id)
+    {
+        // Ambil data submission berdasarkan ID
+        $submission = Submission::findOrFail($id);
+
+        // Lalu kembalikan view atau lakukan aksi lainnya
+        return view('kelurahan.file', ['submission' => $submission]);
+    }
 }

@@ -30,7 +30,7 @@
                     </tr>
                     <tr>
                         <th>Deskripsi</th>
-                        <td>{{ $submission->description }}</td>
+                        <td>{{ $submission->note }}</td>
                     </tr>
                     <tr>
                         <th>Jenis Bank</th>

@@ -55,7 +55,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Barang Yang Diperlukan</td>
+                        <td>RAB</td>
                         <td class="text-center align-middle">
                             <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'rab']) }}"
                                 target="_blank" class="btn btn-primary btn-sm">
@@ -70,12 +70,12 @@
                     <tr>
                         <td>SK Kepengurusan</td>
                         <td class="text-center align-middle">
-                            @if ($submission->management_letter)
-                                <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'management_letter']) }}"
+                            @if ($submission->land_certificate)
+                                <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'land_certificate']) }}"
                                     target="_blank" class="btn btn-primary btn-sm">
                                     <i class="fas fa-eye fa-lg"></i> Lihat
                                 </a>
-                                <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'management_letter']) }}"
+                                <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'land_certificate']) }}"
                                     class="btn btn-success btn-sm">
                                     <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
                                 </a>
@@ -87,11 +87,11 @@
                     <tr>
                         <td>SKT</td>
                         <td class="text-center align-middle">
-                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'skt']) }}"
+                            <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'management_letter']) }}"
                                 target="_blank" class="btn btn-primary btn-sm">
                                 <i class="fas fa-eye fa-lg"></i> Lihat
                             </a>
-                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'skt']) }}"
+                            <a href="{{ route('submissions.download_file', ['id' => $submission->id, 'type' => 'management_letter']) }}"
                                 class="btn btn-success btn-sm">
                                 <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
                             </a>
@@ -141,7 +141,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Surat Keterangan Admin</td>
+                        <td>Surat Keputusan Admin</td>
                         <td class="text-center align-middle">
                             @if ($submission->sk_file)
                                 <a href="{{ route('submissions.show_file', ['id' => $submission->id, 'type' => 'sk_file']) }}"
@@ -158,7 +158,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Surat Keterangan Kelurahan</td>
+                        <td>Surat Keputusan Kelurahan</td>
                         <td class="text-center align-middle">
                             @if ($submission->surat_kelurahan)
                                 <a href="{{ route('surat_kelurahan.show', ['id' => $submission->id]) }}" target="_blank"
@@ -166,6 +166,23 @@
                                     <i class="fas fa-eye fa-lg"></i> Lihat
                                 </a>
                                 <a href="{{ route('surat_kelurahan.download', ['id' => $submission->id]) }}"
+                                    class="btn btn-success btn-sm">
+                                    <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
+                                </a>
+                            @else
+                                <span class="text-muted">File Kosong</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Surat Keputusan Pimpinan</td>
+                        <td class="text-center align-middle">
+                            @if ($submission->suratpimpinan)
+                                <a href="{{ route('showsuratpimpinan', ['id' => $submission->id]) }}" target="_blank"
+                                    class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye fa-lg"></i> Lihat
+                                </a>
+                                <a href="{{ route('unduhsuratpimpinan', ['id' => $submission->id]) }}"
                                     class="btn btn-success btn-sm">
                                     <i class="fas fa-cloud-download-alt fa-lg"></i> Unduh
                                 </a>

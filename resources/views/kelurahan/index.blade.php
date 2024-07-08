@@ -46,7 +46,7 @@
                                     <td>{{ $submission->bank_name }}</td>
                                     <td>{{ $submission->bank_account }}</td>
                                     <td style="text-align: center;">
-                                        <a href="{{ route('submissions.file', $submission->id) }}"
+                                        <a href="{{ route('kelurahan.file', $submission->id) }}"
                                             class="btn btn-primary btn-sm">
                                             <i class="fas fa-eye fa-lg"></i>
                                         </a>

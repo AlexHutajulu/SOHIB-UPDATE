@@ -24,7 +24,7 @@
                                 <th>NIK</th>
                                 <th>Nama dan Email</th>
                                 <th>Alamat</th>
-                                <th>Nama Tempat Rumah Ibadah</th>
+                                <th>Nama Rumah Ibadah</th>
                                 <th>No Telepon</th>
                                 <th>Jenis Bank</th>
                                 <th>No Rekening</th>
@@ -55,7 +55,15 @@
                                     </td>
                                     <td>
                                         <span
-                                            class="{{ $submission->status == 'ditolak' ? 'btn btn-danger btn-sm' : ($submission->status == 'disetujui' ? 'btn btn-success btn-sm' : ($submission->status == 'proses' ? 'btn btn-secondary btn-sm' : '')) }}">
+                                            class="{{ $submission->status == 'ditolak'
+                                                ? 'btn btn-danger btn-sm'
+                                                : ($submission->status == 'disetujui'
+                                                    ? 'btn btn-success btn-sm'
+                                                    : ($submission->status == 'proses'
+                                                        ? 'btn btn-secondary btn-sm'
+                                                        : ($submission->status == 'diterima'
+                                                            ? 'btn btn-info btn-sm'
+                                                            : ''))) }}">
                                             {{ $submission->status ?? 'NULL' }}
                                         </span>
                                     </td>

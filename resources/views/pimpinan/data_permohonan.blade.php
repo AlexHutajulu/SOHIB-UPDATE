@@ -20,13 +20,13 @@
                                 <th>Nama Kelurahan</th>
                                 <th>Nama Rumah Ibadah</th>
                                 <th>Alamat</th>
-                                <th>Surat Keterangan Kelurahan</th>
+                                <th>Surat Keputusan Pimpinan</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($submissions as $submission)
-                                @if ($submission->status == 'proses')
+                                @if ($submission->status == 'disetujui' || $submission->status == 'ditolak' || $submission->status == 'diterima')
                                     <tr>
                                         <td>{{ $submission->nik }}</td>
                                         <td>
@@ -42,10 +42,10 @@
                                         <td>{{ $submission->ibadah }}</td>
                                         <td>{{ $submission->address }}</td>
                                         <td style="text-align: center;">
-                                            <form action="{{ route('surat_kelurahan.upload', $submission->id) }}"
+                                            <form action="{{ route('surat_pimpinan.upload', $submission->id) }}"
                                                 method="post" enctype="multipart/form-data">
                                                 @csrf
-                                                <input type="file" name="file_kelurahan" accept=".pdf, .doc, .docx"
+                                                <input type="file" name="file_pimpinan" accept=".pdf, .doc, .docx"
                                                     id="fileInput{{ $submission->id }}" class="d-none"
                                                     onchange="submitForm(this)">
                                                 <button type="button" class="btn btn-success btn-sm"
@@ -53,8 +53,8 @@
                                                     <i class="fas fa-upload"></i> Upload
                                                 </button>
                                             </form>
-                                            @if ($submission->surat_kelurahan && $submission->surat_kelurahan->file_kelurahan)
-                                                <a href="{{ route('surat_kelurahan.show', $submission->id) }}"
+                                            @if ($submission->suratpimpinan && $submission->suratpimpinan->file_pimpinan)
+                                                <a href="{{ route('surat_pimpinan.show', $submission->id) }}"
                                                     class="btn btn-info btn-sm mt-1 ml-1" target="_blank">
                                                     <i class="fas fa-eye"></i> Lihat
                                                 </a>

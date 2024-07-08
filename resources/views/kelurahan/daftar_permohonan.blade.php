@@ -19,7 +19,7 @@
                                 <th>No Telepon</th>
                                 <th>Nama Kelurahan</th>
                                 <th>Rumah Ibadah</th>
-                                <th>Surat Keterangan Kelurahan</th>
+                                <th>Surat Keputusan Kelurahan</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
