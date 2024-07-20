@@ -71,11 +71,11 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Permohonan Masyarakat (HIBAH)
                         </a>
-                        <div class="sb-sidenav-menu-heading">Ajukan Permohonan</div>
+                        {{-- <div class="sb-sidenav-menu-heading">Ajukan Permohonan</div>
                         <a class="nav-link" href="{{ route('kelurahan.permohonan') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Bantuan Tempat Ibadah (HIBAH)
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">

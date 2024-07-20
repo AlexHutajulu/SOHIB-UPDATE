@@ -4,75 +4,114 @@
 
 @section('content')
     <div class="container mt-4">
-        <h1 class="mb-4 text-left">Dashboard</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                @if (auth()->check() && auth()->user()->role === 'masyarakat')
-                    <li class="breadcrumb-item active" aria-current="page">{{ auth()->user()->name }}</li>
-                @endif
-            </ol>
-        </nav>
-        <div class="card mb-4">
+        @if (Session::has('success'))
+            <div class="alert alert-success">
+                {{ Session::get('success') }}
+            </div>
+        @endif
+        @if (Session::has('error'))
+            <div class="alert alert-danger">
+                {{ Session::get('error') }}
+            </div>
+        @endif
+
+        <div class="card">
             <div class="card-header bg-primary text-white">
-                <h2 class="card-title">Data Pengajuan Anda</h2>
+                <h1 class="card-title mb-0">Data Permohonan Anda</h1>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="datatablesSimple" class="table table-striped table-hover" style="width:100%">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>NIK</th>
-                                <th>Nama dan Email</th>
-                                <th>Alamat</th>
-                                <th>Nama Rumah Ibadah</th>
-                                <th>No Telepon</th>
-                                <th>Jenis Bank</th>
-                                <th>No Rekening</th>
-                                <th>Dokumen Anda</th>
-                                <th>Status</th>
-                                <th>Note</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                    <table class="table table-hover">
                         <tbody>
-                            @foreach ($submissions as $submission)
+                            @forelse ($submissions as $submission)
                                 <tr>
+                                    <th>NIK</th>
                                     <td>{{ $submission->nik }}</td>
-                                    <td>
-                                        <div>{{ $submission->name }}</div>
-                                        <div class="text-muted">{{ $submission->email }}</div>
-                                    </td>
-                                    <td>{{ $submission->address }}</td>
-                                    <td>{{ $submission->ibadah }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>{{ $submission->name }}</td>
+                                <tr>
+                                    <th>Kelurahan</th>
+                                    <td>{{ $submission->kelurahan->kelurahan_name }}</td>
+                                </tr>
+                                </tr>
+                                <tr>
+                                    <th>No Telepon</th>
                                     <td>{{ $submission->phone }}</td>
-                                    <td>{{ $submission->bank_name }}</td>
-                                    <td>{{ $submission->bank_account }}</td>
-                                    <td style="text-align: center;">
+                                </tr>
+                                <tr>
+                                    <th>Tanggal Pengajuan</th>
+                                    <td>{{ $submission->tanggalpengajuan->tanggal_pengajuan ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{{ $submission->email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama Rumah Ibadah</th>
+                                    <td>{{ $submission->ibadah }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Deskripsi</th>
+                                    <td>{{ $submission->note }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jenis Bank</th>
+                                    <td>{{ $submission->bank->bank_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>No Rekening</th>
+                                    <td>{{ $submission->bank->bank_account }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Alamat</th>
+                                    <td>{{ $submission->address }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>
+                                        <span
+                                            class="{{ $submission->status == 'ditolak'
+                                                ? 'badge bg-danger'
+                                                : ($submission->status == 'disetujui'
+                                                    ? 'badge bg-success'
+                                                    : ($submission->status == 'proses'
+                                                        ? 'badge bg-secondary'
+                                                        : ($submission->status == 'diterima'
+                                                            ? 'badge bg-info'
+                                                            : ($submission->status == 'diketahui'
+                                                                ? 'badge bg-primary'
+                                                                : ($submission->status == 'pencairan'
+                                                                    ? 'badge bg-info'
+                                                                    : ''))))) }}">
+                                            {{ $submission->status ?? 'NULL' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
                                         <a href="{{ route('submissions.file', $submission->id) }}"
                                             class="btn btn-primary btn-sm">
                                             <i class="fas fa-eye fa-lg"></i> Lihat
                                         </a>
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="{{ $submission->status == 'ditolak'
-                                                ? 'btn btn-danger btn-sm'
-                                                : ($submission->status == 'disetujui'
-                                                    ? 'btn btn-success btn-sm'
-                                                    : ($submission->status == 'proses'
-                                                        ? 'btn btn-secondary btn-sm'
-                                                        : ($submission->status == 'diterima'
-                                                            ? 'btn btn-info btn-sm'
-                                                            : ''))) }}">
-                                            {{ $submission->status ?? 'NULL' }}
-                                        </span>
-                                    </td>
-                                    <td>{{ $submission->note }}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-primary btn-sm">Ajukan Ulang</a>
+                                        @if ($submission->status == 'ditolak')
+                                            <a href="{{ route('submissions.resubmit', $submission->id) }}"
+                                                class="btn btn-success btn-sm">
+                                                <i class="fas fa-redo fa-lg"></i> Ajukan Ulang
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="alert alert-info">
+                                            Anda belum mengajukan permohonan hibah.
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -81,14 +120,14 @@
     </div>
 @endsection
 
-@section('styles')
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-@endsection
-
 @section('scripts')
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function openFileInput(id) {
+            document.getElementById('fileInput' + id).click();
+        }
+
+        function submitForm(input) {
+            input.closest('form').submit();
+        }
+    </script>
 @endsection

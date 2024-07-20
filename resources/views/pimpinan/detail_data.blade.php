@@ -40,6 +40,10 @@
                                 <td>{{ $submission->email }}</td>
                             </tr>
                             <tr>
+                                <th>Kelurahan</th>
+                                <td>{{ $submission->kelurahan->kelurahan_name }}</td>
+                            </tr>
+                            <tr>
                                 <th>Nama Rumah Ibadah</th>
                                 <td>{{ $submission->ibadah }}</td>
                             </tr>
@@ -49,11 +53,35 @@
                             </tr>
                             <tr>
                                 <th>Jenis Bank</th>
-                                <td>{{ $submission->bank_name }}</td>
+                                <td>{{ $submission->bank->bank_name }}</td>
                             </tr>
                             <tr>
                                 <th>No Rekening</th>
-                                <td>{{ $submission->bank_account }}</td>
+                                <td>{{ $submission->bank->bank_account }}</td>
+                            </tr>
+                            <tr>
+                                <th>Masukkan Tanggal Diterima</th>
+                                <td>
+                                    <input type="date"
+                                        class="form-control @error('otorisasi_pimpinan') is-invalid @enderror"
+                                        name="otorisasi_pimpinan" id="otorisasi_pimpinan"
+                                        value="{{ old('otorisasi_pimpinan') }}">
+                                    @error('otorisasi_pimpinan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Tanggal Diterima</th>
+                                <td>{{ $submission->otorisasi->otorisasi_pimpinan ?? 'Kosong' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tanggal Pengajuan</th>
+                                <td>{{ $submission->tanggalpengajuan->tanggal_pengajuan ?? 'kosong' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tanggal Pencairan</th>
+                                <td>{{ $submission->berita_acara->tanggal_pencairan ?? 'kosong' }}</td>
                             </tr>
                             <tr>
                                 <th>Status</th>
@@ -67,7 +95,11 @@
                                                     ? 'badge bg-secondary'
                                                     : ($submission->status == 'diterima'
                                                         ? 'badge bg-info'
-                                                        : ''))) }}">
+                                                        : ($submission->status == 'diketahui'
+                                                            ? 'badge bg-primary'
+                                                            : ($submission->status == 'pencairan'
+                                                                ? 'badge bg-info'
+                                                                : ''))))) }}">
                                         {{ $submission->status ?? 'NULL' }}
                                     </span>
                                 </td>
@@ -79,10 +111,11 @@
             <div class="card-footer text-center">
                 @if ($submission->status == 'disetujui')
                     <form action="{{ route('pimpinan.updateStatus', ['id' => $submission->id, 'status' => 'diterima']) }}"
-                        method="POST" class="d-inline">
+                        method="POST" class="d-inline" id="form-terima">
                         @csrf
                         @method('PUT')
-                        <button type="submit" class="btn btn-info mx-2">Terima</button>
+                        <input type="hidden" name="otorisasi_pimpinan" id="input-otorisasi-pimpinan">
+                        <button type="button" class="btn btn-info mx-2" onclick="submitTerimaForm()">Terima</button>
                     </form>
                     <form action="{{ route('pimpinan.updateStatus', ['id' => $submission->id, 'status' => 'ditolak']) }}"
                         method="POST" class="d-inline">
@@ -99,13 +132,13 @@
                             <i class="fas fa-upload"></i> Upload
                         </button>
                     </form>
-                    @endif
-                    @if ($submission->status == 'diterima' && $submission->suratpimpinan && $submission->suratpimpinan->file_pimpinan)
-                        <a href="{{ route('surat_pimpinan.show', $submission->id) }}" class="btn btn-info mx-2"
-                            target="_blank">
-                            <i class="fas fa-eye"></i> Lihat
-                        </a>
-                    @endif
+                @endif
+                @if ($submission->status == 'diterima' && $submission->suratpimpinan && $submission->suratpimpinan->file_pimpinan)
+                    <a href="{{ route('surat_pimpinan.show', $submission->id) }}" class="btn btn-info mx-2"
+                        target="_blank">
+                        <i class="fas fa-eye"></i> Lihat
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -118,5 +151,15 @@
 
     function submitForm(input) {
         input.closest('form').submit();
+    }
+
+    function submitTerimaForm() {
+        var tanggalDiterima = document.getElementById('otorisasi_pimpinan').value;
+        if (!tanggalDiterima) {
+            alert('Silahkan Masukkan Tanggal Penerimaan Terlebih Dahulu');
+            return;
+        }
+        document.getElementById('input-otorisasi-pimpinan').value = tanggalDiterima;
+        document.getElementById('form-terima').submit();
     }
 </script>

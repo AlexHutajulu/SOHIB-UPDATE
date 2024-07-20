@@ -11,6 +11,7 @@ use App\Http\Controllers\MasyarakatController;
 use App\Http\Controllers\UpdateProfilController;
 use App\Http\Controllers\KelurahanController;
 use App\Http\Controllers\MapsController;
+use App\Http\Controllers\SuperadminController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -28,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('landing');
 });
-Route::get('/submission/{id}', [AdminController::class, 'detail'])->name('submission.detail');
+Route::get('/admin/submission/{id}', [AdminController::class, 'detail'])->name('submission.detail');
 Route::get('/admin/maps', [MapsController::class, 'adminmaps'])->name('adminmaps');
 Route::post('maps', [MapsController::class, 'store'])->name('maps.store');
 Route::get('/maps', [MapsController::class, 'showMaps'])->name('maps.show');
@@ -71,6 +72,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
     Route::get('/admin/show/{id}', [AdminController::class, 'showsuratpimpinan'])->name('showsuratpimpinan');
     Route::get('/admin/download/{id}', [Admincontroller::class, 'downloadsuratpimpinan'])->name('unduhsuratpimpinan');
+    
 });
 // File
 Route::get('/file/{id}/{type}', [FileController::class, 'show'])->name('file.show');
@@ -92,6 +94,8 @@ Route::middleware(['auth', 'role:kelurahan'])->group(function () {
         Route::post('/surat_kelurahan/{submissionId}', [KelurahanController::class, 'store'])
             ->name('surat_kelurahan.upload');
     });
+    Route::get('/kelurahan/pemohon/{id}', [KelurahanController::class, 'detailpemohon'])->name('detail.pemohon');
+    Route::put('/kelurahan/update/{id}/status/{status}', [KelurahanController::class, 'kelurahanupdateStatus'])->name('pemohon.updateStatus');
 });
 Route::get('/show/{id}', [KelurahanController::class, 'show'])->name('surat_kelurahan.show');
 Route::get('/download/{id}', [KelurahanController::class, 'download'])->name('surat_kelurahan.download');
@@ -109,3 +113,14 @@ Route::middleware(['auth', 'role:pimpinan'])->group(function () {
 });
 Route::get('/submission/show/{id}', [MasyarakatController::class, 'seeleadershipletter'])->name('seeleadershipletter');
 Route::get('/submission/download/{id}', [Masyarakatcontroller::class, 'downloadleadershipletter'])->name('downloadleadershipletter');
+
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    // Rute untuk menampilkan daftar akun
+    Route::get('/superadmin/accounts', [SuperadminController::class, 'index'])->name('superadmin.accounts.index');
+
+    // Rute untuk memperbarui peran akun
+    Route::post('/superadmin/accounts/{user}', [SuperadminController::class, 'updateRole'])->name('superadmin.accounts.updateRole');
+});
+
+Route::get('/submissions/{id}/resubmit', [SubmissionController::class, 'showResubmitForm'])->name('submissions.resubmit');
+Route::post('/submissions/{id}/resubmit', [SubmissionController::class, 'resubmit'])->name('submissions.do_resubmit');

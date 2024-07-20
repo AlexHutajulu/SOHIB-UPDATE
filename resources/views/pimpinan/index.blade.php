@@ -69,6 +69,10 @@
                         loc: [{{ $coordinate['latitude'] }}, {{ $coordinate['longitude'] }}],
                         popup: `<strong>Nama:</strong> {{ $coordinate['submission']->name }}<br>
                             <strong>Nama Rumah Ibadah:</strong> {{ $coordinate['submission']->ibadah }}<br>
+                            <strong>Status:</strong> 
+                            <span class="{{ $coordinate['submission']->status == 'ditolak' ? 'badge bg-danger' : '' }}{{ $coordinate['submission']->status == 'disetujui' ? 'badge bg-success' : '' }}{{ $coordinate['submission']->status == 'proses' ? 'badge bg-secondary' : '' }}{{ $coordinate['submission']->status == 'diterima' ? 'badge bg-info' : '' }}{{ $coordinate['submission']->status == 'diketahui' ? 'badge bg-primary' : '' }}{{ $coordinate['submission']->status == 'pencairan' ? 'badge bg-info' : '' }}">
+                                {{ $coordinate['submission']->status ?? 'NULL' }}
+                            </span><br>
                             <button onclick="redirectToDetail('{{ route('pimpinan.permohonan', ['id' => $coordinate['submission']->id]) }}')">Detail</button>`
                     },
                 @endforeach

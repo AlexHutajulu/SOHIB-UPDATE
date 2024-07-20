@@ -19,14 +19,11 @@ class CreateSubmissionsTable extends Migration
             $table->foreignId('user_id')->unique()->constrained(); // Kunci asing ke tabel users, diatur sebagai unik
             $table->string('nik')->unique();
             $table->string('name', 100);
-            $table->string('kelurahan_name');
             $table->text('address');
             $table->text('ibadah');
-            $table->string('bank_name')->nullable();
             $table->string('phone');
             $table->string('email')->unique();
             $table->string('budget');
-            $table->string('bank_account');
             $table->binary('application_letter');
             $table->binary('documentation');
             $table->binary('land_certificate');

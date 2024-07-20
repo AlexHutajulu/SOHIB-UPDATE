@@ -12,42 +12,49 @@
     <div class="row">
         @forelse ($newSubmissions as $submission)
             <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">{{ $submission->nik }}</h3>
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $submission->name }}</h5>
-                        <form action="{{ route('admin.approve', $submission->id) }}" method="POST">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ $submission->nik }}</h6>
+                        <form action="{{ route('admin.approve', $submission->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="status" id="disetujui"
-                                    value="disetujui">
-                                <label class="form-check-label" for="disetujui">Disetujui</label>
+                            <div class="mb-3">
+                                <label class="form-label">Status:</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status"
+                                        id="disetujui{{ $submission->id }}" value="disetujui">
+                                    <label class="form-check-label" for="disetujui{{ $submission->id }}">Disetujui</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status"
+                                        id="ditolak{{ $submission->id }}" value="ditolak">
+                                    <label class="form-check-label" for="ditolak{{ $submission->id }}">Tidak
+                                        Disetujui</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="status" id="ditolak"
-                                    value="ditolak">
-                                <label class="form-check-label" for="ditolak">Tidak Disetujui</label>
-                            </div>
-                            <div class="col-md-12">
-                                <label for="note" class="form-label">Catatan :</label>
-                                <textarea class="form-control" name="note" id="note" rows="3">{{ old('note') }}</textarea>
+                            <div class="mb-3">
+                                <label for="note{{ $submission->id }}" class="form-label">Catatan:</label>
+                                <textarea class="form-control" name="note" id="note{{ $submission->id }}" rows="2">{{ old('note') }}</textarea>
                                 @error('note')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn btn-primary my-3">Submit</button>
+                            <button type="submit" class="btn btn-primary mb-2">Submit</button>
                         </form>
+                        <a href="{{ route('submission.detail', $submission->id) }}" class="btn btn-info btn-sm mt-auto">
+                            <i class="fas fa-info-circle"></i> Detail Pemohon
+                        </a>
                     </div>
                 </div>
             </div>
         @empty
             <div class="col-md-12">
-                <p>No new submissions.</p>
+                <p class="text-center">Tidak Ada Permohonan Baru</p>
             </div>
         @endforelse
     </div>
 
-    {{-- Bagian untuk menampilkan tabel submission yang sudah diapprove/reject --}}
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
@@ -63,9 +70,9 @@
                             <th>No Telepon</th>
                             <th>Jenis Bank</th>
                             <th>No Rekening</th>
+                            <th>Kelurahan</th>
                             <th>Ibadah</th>
                             <th>Lihat File</th>
-                            <th>Upload SK</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -83,8 +90,9 @@
                                     </div>
                                 </td>
                                 <td>{{ $submission->phone }}</td>
-                                <td>{{ $submission->bank_name }}</td>
-                                <td>{{ $submission->bank_account }}</td>
+                                <td>{{ $submission->bank->bank_name }}</td>
+                                <td>{{ $submission->bank->bank_account }}</td>
+                                <td>{{ $submission->kelurahan->kelurahan_name }}</td>
                                 <td>{{ $submission->ibadah }}</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <a href="{{ route('admin.file', $submission->id) }}"
@@ -92,18 +100,19 @@
                                         <i class="fa-regular fa-eye fa-lg" style="color: #005eff;"></i>
                                     </a>
                                 </td>
-                                <td style="text-align: center;">
-                                    <form action="{{ route('admin.uploadSk', $submission->id) }}" method="post"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="file" name="sk_file" accept=".pdf, .doc, .docx"
-                                            id="fileInput{{ $submission->id }}" class="d-none" onchange="submitForm(this)">
-                                        <button type="button" class="btn btn-success btn-sm"
-                                            onclick="openFileInput({{ $submission->id }})">Upload</button>
-                                    </form>
-                                </td>
                                 <td>
-                                    <span class="btn btn-sm {{ $submission->status == 'proses' ? 'btn-secondary' : '' }}">
+                                    <span
+                                        class="{{ $submission->status == 'ditolak'
+                                            ? 'badge bg-danger'
+                                            : ($submission->status == 'disetujui'
+                                                ? 'badge bg-success'
+                                                : ($submission->status == 'proses'
+                                                    ? 'badge bg-secondary'
+                                                    : ($submission->status == 'diterima'
+                                                        ? 'badge bg-info'
+                                                        : ($submission->status == 'diketahui'
+                                                            ? 'badge bg-primary'
+                                                            : '')))) }}">
                                         {{ $submission->status ?? 'NULL' }}
                                     </span>
                                 </td>

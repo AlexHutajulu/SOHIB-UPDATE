@@ -26,7 +26,7 @@
                         </thead>
                         <tbody>
                             @foreach ($submissions as $submission)
-                                @if ($submission->status == 'disetujui' || $submission->status == 'ditolak' || $submission->status == 'diterima')
+                                @if ($submission->status == 'disetujui' || $submission->status == 'ditolak' || $submission->status == 'diterima' || $submission->status == 'pencairan')
                                     <tr>
                                         <td>{{ $submission->nik }}</td>
                                         <td>
@@ -38,21 +38,10 @@
                                             </div>
                                         </td>
                                         <td>{{ $submission->phone }}</td>
-                                        <td>{{ $submission->kelurahan_name }}</td>
+                                        <td>{{ $submission->kelurahan->kelurahan_name }}</td>
                                         <td>{{ $submission->ibadah }}</td>
                                         <td>{{ $submission->address }}</td>
                                         <td style="text-align: center;">
-                                            <form action="{{ route('surat_pimpinan.upload', $submission->id) }}"
-                                                method="post" enctype="multipart/form-data">
-                                                @csrf
-                                                <input type="file" name="file_pimpinan" accept=".pdf, .doc, .docx"
-                                                    id="fileInput{{ $submission->id }}" class="d-none"
-                                                    onchange="submitForm(this)">
-                                                <button type="button" class="btn btn-success btn-sm"
-                                                    onclick="openFileInput({{ $submission->id }})">
-                                                    <i class="fas fa-upload"></i> Upload
-                                                </button>
-                                            </form>
                                             @if ($submission->suratpimpinan && $submission->suratpimpinan->file_pimpinan)
                                                 <a href="{{ route('surat_pimpinan.show', $submission->id) }}"
                                                     class="btn btn-info btn-sm mt-1 ml-1" target="_blank">
@@ -62,11 +51,19 @@
                                         </td>
                                         <td>
                                             <span
-                                                class="
-                                                @if ($submission->status == 'ditolak') btn btn-danger btn-sm
-                                                @elseif ($submission->status == 'disetujui') btn btn-success btn-sm
-                                                @elseif ($submission->status == 'proses') btn btn-secondary btn-sm
-                                                @else btn btn-secondary btn-sm @endif">
+                                                class="{{ $submission->status == 'ditolak'
+                                                    ? 'badge bg-danger'
+                                                    : ($submission->status == 'disetujui'
+                                                        ? 'badge bg-success'
+                                                        : ($submission->status == 'proses'
+                                                            ? 'badge bg-secondary'
+                                                            : ($submission->status == 'diterima'
+                                                                ? 'badge bg-info'
+                                                                : ($submission->status == 'diketahui'
+                                                                    ? 'badge bg-primary'
+                                                                    : ($submission->status == 'pencairan'
+                                                                        ? 'badge bg-info'
+                                                                        : ''))))) }}">
                                                 {{ $submission->status ?? 'NULL' }}
                                             </span>
                                         </td>

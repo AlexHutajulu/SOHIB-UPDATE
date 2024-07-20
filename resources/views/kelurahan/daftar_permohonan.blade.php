@@ -17,15 +17,16 @@
                                 <th>NIK</th>
                                 <th>Nama</th>
                                 <th>No Telepon</th>
+                                <th>Tanggal</th>
                                 <th>Nama Kelurahan</th>
                                 <th>Rumah Ibadah</th>
-                                <th>Surat Keputusan Kelurahan</th>
                                 <th>Status</th>
+                                <th>Detail</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($submissions as $submission)
-                                @if ($submission->status == 'proses')
+                                @if (in_array($submission->status, ['proses', 'diketahui']))
                                     <tr>
                                         <td>{{ $submission->nik }}</td>
                                         <td>
@@ -37,36 +38,30 @@
                                             </div>
                                         </td>
                                         <td>{{ $submission->phone }}</td>
-                                        <td>{{ $submission->kelurahan_name }}</td>
+                                        <td>{{ $submission->tanggalpengajuan->tanggal_pengajuan ?? 'N/A' }}</td>
+                                        <td>{{ $submission->kelurahan->kelurahan_name }}</td>
                                         <td>{{ $submission->ibadah }}</td>
-                                        <td style="text-align: center;">
-                                            <form action="{{ route('surat_kelurahan.upload', $submission->id) }}"
-                                                method="post" enctype="multipart/form-data">
-                                                @csrf
-                                                <input type="file" name="file_kelurahan" accept=".pdf, .doc, .docx"
-                                                    id="fileInput{{ $submission->id }}" class="d-none"
-                                                    onchange="submitForm(this)">
-                                                <button type="button" class="btn btn-success btn-sm"
-                                                    onclick="openFileInput({{ $submission->id }})">
-                                                    <i class="fas fa-upload"></i> Upload
-                                                </button>
-                                            </form>
-                                            @if ($submission->surat_kelurahan && $submission->surat_kelurahan->file_kelurahan)
-                                                <a href="{{ route('surat_kelurahan.show', $submission->id) }}"
-                                                    class="btn btn-info btn-sm mt-1 ml-1" target="_blank">
-                                                    <i class="fas fa-eye"></i> Lihat
-                                                </a>
-                                            @endif
-                                        </td>
                                         <td>
                                             <span
-                                                class="
-                                                @if ($submission->status == 'ditolak') btn btn-danger btn-sm
-                                                @elseif ($submission->status == 'disetujui') btn btn-success btn-sm
-                                                @elseif ($submission->status == 'proses') btn btn-secondary btn-sm
-                                                @else btn btn-secondary btn-sm @endif">
+                                                class="{{ $submission->status == 'ditolak'
+                                                    ? 'badge bg-danger'
+                                                    : ($submission->status == 'disetujui'
+                                                        ? 'badge bg-success'
+                                                        : ($submission->status == 'proses'
+                                                            ? 'badge bg-secondary'
+                                                            : ($submission->status == 'diterima'
+                                                                ? 'badge bg-info'
+                                                                : ($submission->status == 'diketahui'
+                                                                    ? 'badge bg-primary'
+                                                                    : '')))) }}">
                                                 {{ $submission->status ?? 'NULL' }}
                                             </span>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="{{ route('detail.pemohon', $submission->id) }}"
+                                                class="btn btn-primary btn-sm">
+                                                <i class="fas fa-info-circle"></i> Detail
+                                            </a>
                                         </td>
                                     </tr>
                                 @endif

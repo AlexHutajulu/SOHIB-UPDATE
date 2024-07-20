@@ -1,8 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background-image: url('/image/Banjarbaru_city_hall.jpg');
+    font-family: "Roboto", sans-serif;
+    background-image: url("/image/Banjarbaru_city_hall.jpg");
     background-size: cover;
     background-position: center;
     display: flex;
@@ -68,49 +68,6 @@ body {
     color: #333;
 }
 
-.form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-    border-color: #007bff;
-    outline: none;
-}
-
-.form-group button {
-    padding: 12px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.form-group button:hover {
-    background-color: #0056b3;
-}
-
 .google-login {
     text-align: center;
     margin-top: 20px;
@@ -169,13 +126,8 @@ body {
         padding: 0 20px;
     }
 
-    .form-group button,
     .google-btn {
         width: 100%;
         margin: 0 0 10px 0;
-    }
-
-    .form-group {
-        align-items: stretch;
     }
 }

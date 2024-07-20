@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Map;
 use Auth;
 use App\Models\Submission;
+use App\Models\otorisasi;
 use App\Models\suratpimpinan;
 
 class PimpinanController extends Controller
@@ -91,18 +92,35 @@ class PimpinanController extends Controller
         }
     }
 
-    public function updateStatus($id, $status)
+    public function updateStatus($id, $status, Request $request)
     {
         $submission = Submission::findOrFail($id);
 
+        // Cek jika status adalah 'diterima' dan belum ada surat pimpinan
         if ($status == 'diterima' && !$submission->suratpimpinan) {
             alert()->error('Silahkan Upload Surat Terlebih Dahulu', 'Coba Lagi');
             return redirect()->route('pimpinan.permohonan', $id);
         }
 
+        // Cek jika status adalah 'diterima' dan tanggal penerimaan belum diinput
+        if ($status == 'diterima' && !$request->input('otorisasi_pimpinan')) {
+            alert()->error('Silahkan Masukkan Tanggal Penerimaan Terlebih Dahulu', 'Coba Lagi');
+            return redirect()->route('pimpinan.permohonan', $id);
+        }
+
+        // Update status submission
         $submission->status = $status;
         $submission->save();
 
+        // Menyimpan data otorisasi jika status diterima
+        if ($status == 'diterima') {
+            $otorisasi = new otorisasi();
+            $otorisasi->submission_id = $submission->id;
+            $otorisasi->otorisasi_pimpinan = $request->input('otorisasi_pimpinan');
+            $otorisasi->save();
+        }
+
+        // Menampilkan pesan berhasil
         $message = $status == 'ditolak' ? 'Permohonan ditolak' : 'Permohonan diterima';
         alert()->success($message, 'Berhasil');
         return redirect()->route('pimpinan.permohonan', $id);

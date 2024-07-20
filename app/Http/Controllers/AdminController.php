@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Submission;
+use App\Models\berita_acara;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 
@@ -30,7 +31,7 @@ class AdminController extends Controller
 
     public function newSubmissions()
     {
-        $newSubmissions = Submission::where('status', 'proses')->get();
+        $newSubmissions = Submission::where('status', 'diketahui')->get();
         $approvedSubmissions = Submission::where('status', 'disetujui')->get();
         $rejectedSubmissions = Submission::where('status', 'ditolak')->get();
 
@@ -153,6 +154,13 @@ class AdminController extends Controller
         // Temukan submission berdasarkan ID
         $submission = Submission::findOrFail($id);
 
+        // Periksa status submission
+        if ($submission->status !== 'diterima') {
+            // Jika status belum diterima, tampilkan pesan kesalahan
+            alert()->error('Permohonan belum diterima oleh pimpinan', 'Coba Lagi Nanti');
+            return redirect()->back();
+        }
+
         // Proses penyimpanan file
         if ($request->hasFile('sk_file')) {
             $file = $request->file('sk_file');
@@ -160,16 +168,30 @@ class AdminController extends Controller
 
             // Simpan path file ke dalam model submission
             $submission->sk_file = $filePath;
+
+            // Ubah status submission menjadi 'pencairan'
+            $submission->status = 'pencairan';
+
+            // Buat berita acara baru dan isi tanggal_pencairan dengan waktu sekarang
+            $berita_acara = new berita_acara();
+            $berita_acara->submission_id = $submission->id;
+            $berita_acara->tanggal_pencairan = now(); // Mengisi tanggal_pencairan dengan waktu sekarang
+            $berita_acara->save();
+
+            // Simpan perubahan pada submission
             $submission->save();
 
-            // Jika perlu, tambahkan respons atau redirect ke halaman yang sesuai
-            toast('Upload Surat Berhasil.', 'success');
+            // Tambahkan respons atau redirect ke halaman yang sesuai
+            toast('Upload Surat Berhasil. Status permohonan diubah menjadi pencairan.', 'success');
             return redirect()->back();
         }
 
         toast('Upload Surat Gagal.', 'error');
         return redirect()->back();
     }
+
+
+
 
     public function store(Request $request)
     {

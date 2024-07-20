@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Map;
 use App\Models\surat_kelurahan;
 use Illuminate\Support\Facades\Session;
 use App\Models\Submission;
@@ -18,10 +19,28 @@ class KelurahanController extends Controller
         if ($user->role !== 'kelurahan') {
             abort(403, 'Unauthorized action.');
         }
-        // Hanya mengambil submissions yang terkait dengan kelurahan tertentu jika diperlukan
+
+        // Mengambil data peta yang terkait dengan submissions milik user dengan peran "masyarakat"
+        $maps = Map::whereHas('submission', function ($query) {
+            $query->whereHas('user', function ($query) {
+                $query->where('role', 'masyarakat');
+            });
+        })->with('submission')->get();
+
+        $coordinates = $maps->map(function ($map) {
+            return [
+                'latitude' => $map->latitude,
+                'longitude' => $map->longitude,
+                'submission' => $map->submission,
+            ];
+        })->toArray();
+
+        // Mengambil submissions yang terkait dengan user kelurahan yang sedang login
         $submissions = Submission::where('user_id', $user->id)->get();
-        return view('kelurahan.index', compact('submissions'));
+
+        return view('kelurahan.index', compact('submissions', 'coordinates'));
     }
+
 
     public function permohonan()
     {
@@ -40,8 +59,10 @@ class KelurahanController extends Controller
 
     public function pengajuan()
     {
-        return view('kelurahan.permohonan');
+        $existingSubmission = Submission::where('user_id', auth()->id())->first();
+        return view('kelurahan.permohonan', compact('existingSubmission'));
     }
+
 
     public function store(Request $request, $submissionId)
     {
@@ -97,5 +118,33 @@ class KelurahanController extends Controller
 
         // Lalu kembalikan view atau lakukan aksi lainnya
         return view('kelurahan.file', ['submission' => $submission]);
+    }
+
+    public function detailpemohon($id)
+    {
+        $submission = Submission::find($id);
+
+        if (!$submission) {
+            return redirect()->back()->with('error', 'Submission not found.');
+        }
+
+        return view('kelurahan.detail_pemohon', compact('submission'));
+    }
+
+    public function kelurahanupdateStatus($id, $status)
+    {
+        $submission = Submission::findOrFail($id);
+
+        if ($status == 'diketahui' && !$submission->surat_kelurahan) {
+            alert()->error('Silahkan Upload Surat Terlebih Dahulu', 'Coba Lagi');
+            return redirect()->route('detail.pemohon', $id);
+        }
+
+        $submission->status = $status;
+        $submission->save();
+
+        $message = $status == 'ditolak' ? 'Permohonan ditolak' : 'Permohonan diterima';
+        alert()->success($message, 'Berhasil');
+        return redirect()->route('detail.pemohon', $id);
     }
 }

@@ -20,10 +20,10 @@
                                         <th>No Telepon</th>
                                         <th>Jenis Bank</th>
                                         <th>No Rekening</th>
-                                        <th>Ibadah</th>
+                                        <th>Kelurahan</th>
+                                        <th>Rumah Ibadah</th>
                                         <th>Lihat File</th>
                                         <th>Upload SK</th>
-                                        <th>Catatan</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -34,6 +34,7 @@
                                             $submission->status == 'disetujui' ||
                                                 $submission->status == 'ditolak' ||
                                                 $submission->status == 'diterima' ||
+                                                $submission->status == 'diketahui' ||
                                                 $submission->status == 'pencairan')
                                             <tr>
                                                 <td>{{ $submission->nik }}</td>
@@ -46,8 +47,9 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ $submission->phone }}</td>
-                                                <td>{{ $submission->bank_name }}</td>
-                                                <td>{{ $submission->bank_account }}</td>
+                                                <td>{{ $submission->bank->bank_name }}</td>
+                                                <td>{{ $submission->bank->bank_account }}</td>
+                                                <td>{{ $submission->kelurahan->kelurahan_name }}</td>
                                                 <td>{{ $submission->ibadah }}</td>
                                                 <td style="text-align: center;">
                                                     <a href="{{ route('admin.file', $submission->id) }}"
@@ -66,18 +68,21 @@
                                                             onclick="openFileInput({{ $submission->id }})">Upload</button>
                                                     </form>
                                                 </td>
-                                                <td>{{ $submission->note }}</td>
                                                 <td>
                                                     <span
                                                         class="{{ $submission->status == 'ditolak'
-                                                            ? 'btn btn-danger btn-sm'
+                                                            ? 'badge bg-danger'
                                                             : ($submission->status == 'disetujui'
-                                                                ? 'btn btn-success btn-sm'
+                                                                ? 'badge bg-success'
                                                                 : ($submission->status == 'proses'
-                                                                    ? 'btn btn-secondary btn-sm'
+                                                                    ? 'badge bg-secondary'
                                                                     : ($submission->status == 'diterima'
-                                                                        ? 'btn btn-info btn-sm'
-                                                                        : ''))) }}">
+                                                                        ? 'badge bg-info'
+                                                                        : ($submission->status == 'diketahui'
+                                                                            ? 'badge bg-primary'
+                                                                            : ($submission->status == 'pencairan'
+                                                                                ? 'badge bg-info'
+                                                                                : ''))))) }}">
                                                         {{ $submission->status ?? 'NULL' }}
                                                     </span>
                                                 </td>
@@ -101,15 +106,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <script>
         function openFileInput(submissionId) {
             document.getElementById(`fileInput${submissionId}`).click();
@@ -119,4 +115,18 @@
             input.form.submit();
         }
     </script>
+@endsection
+
+@section('styles')
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 @endsection
